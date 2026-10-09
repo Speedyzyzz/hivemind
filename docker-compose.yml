@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  hivemind-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@hivemind-postgres:5432/hivemind
+    depends_on:
+      - hivemind-postgres
+
+  hivemind-gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+
+  hivemind-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8003
+      - NEXT_PUBLIC_WS_URL=ws://localhost:4000
+    depends_on:
+      - hivemind-backend
+      - hivemind-gateway
+
+  hivemind-postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=hivemind
+    ports:
+      - "5434:5432"
+    volumes:
+      - hivemind-pgdata:/var/lib/postgresql/data
+
+volumes:
+  hivemind-pgdata:

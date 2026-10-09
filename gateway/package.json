@@ -1,0 +1,19 @@
+{
+  "name": "@frontier-runtimes/hivemind-gateway",
+  "version": "0.1.0",
+  "description": "TypeScript WebSocket Gateway for HiveMind multiplayer collaborative state",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "node --test dist/test/*.test.js"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/ws": "^8.5.10",
+    "typescript": "^5.4.5"
+  }
+}
